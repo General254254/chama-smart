@@ -187,6 +187,7 @@ def chama_detail(request, chama_id):
         'announcements': chama_announcements,
         'members': members,
         'can_edit': membership.can_edit_chama(),
+        'can_add_transactions': membership.can_add_transactions(),
     }
     
     return render(request, 'core/chama_detail.html', context)
@@ -300,7 +301,7 @@ def transaction_add(request, chama_id):
     chama = get_object_or_404(Chama, id=chama_id)
     membership = Membership.objects.filter(chama=chama, user=request.user, is_active=True).first()
     
-    if not membership or not (membership.role in ['admin', 'treasurer', 'chairperson']):
+    if not membership or not membership.can_add_transactions():
         messages.error(request, 'You do not have permission to add transactions.')
         return redirect('chama_detail', chama_id=chama_id)
     
@@ -392,6 +393,17 @@ def message_send(request):
             return redirect('message_list')
     else:
         form = MessageForm(user=request.user)
+        # Handle reply functionality
+        reply_to = request.GET.get('reply_to')
+        if reply_to:
+            try:
+                recipient = User.objects.get(id=reply_to)
+                # Check if recipient is in the queryset (user can message them)
+                if recipient in form.fields['recipient'].queryset:
+                    form.initial['recipient'] = recipient
+                    form.initial['subject'] = f"Re: "
+            except (User.DoesNotExist, ValueError):
+                pass
     
     return render(request, 'core/message_form.html', {'form': form})
 

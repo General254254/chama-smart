@@ -86,6 +86,9 @@ class Membership(models.Model):
     def can_edit_chama(self):
         return self.role in ['admin', 'chairperson'] and self.is_active
     
+    def can_add_transactions(self):
+        return self.role in ['admin', 'treasurer', 'chairperson'] and self.is_active
+    
     def get_total_contributions(self):
         return self.contributions.aggregate(total=models.Sum('amount'))['total'] or Decimal('0.00')
     

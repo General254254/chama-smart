@@ -27,7 +27,7 @@
                 <td>KSh {{ transaction.amount|floatformat:2 }}</td>
                 <td>{{ transaction.purpose }}</td>
                 <td>{{ transaction.description|truncatewords:10 }}</td>
-                <td>{{ transaction.created_by.username }}</td>
+                <td>{% if transaction.created_by %}{{ transaction.created_by.username }}{% else %}Unknown{% endif %}</td>
             </tr>
             {% endfor %}
         </tbody>

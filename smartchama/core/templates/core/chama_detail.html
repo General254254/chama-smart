@@ -21,7 +21,7 @@
     <div class="chama-actions-bar">
         <a href="{% url 'contribution_add' chama.id %}" class="btn btn-primary">Add Contribution</a>
         <a href="{% url 'contribution_list' chama.id %}" class="btn btn-secondary">View Contributions</a>
-        {% if membership.role in 'admin,treasurer,chairperson' %}
+        {% if can_add_transactions %}
         <a href="{% url 'transaction_add' chama.id %}" class="btn btn-secondary">Add Transaction</a>
         <a href="{% url 'transaction_list' chama.id %}" class="btn btn-secondary">View Transactions</a>
         {% endif %}
@@ -94,7 +94,7 @@
                 <div class="announcement-item {% if announcement.is_important %}important{% endif %}">
                     <h4>{{ announcement.title }}</h4>
                     <p>{{ announcement.content|truncatewords:30 }}</p>
-                    <small>By {{ announcement.created_by.username }} on {{ announcement.created_at|date:"M d, Y" }}</small>
+                    <small>By {% if announcement.created_by %}{{ announcement.created_by.username }}{% else %}Unknown{% endif %} on {{ announcement.created_at|date:"M d, Y" }}</small>
                 </div>
                 {% endfor %}
             </div>

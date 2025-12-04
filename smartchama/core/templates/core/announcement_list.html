@@ -16,7 +16,7 @@
             <h3>{{ announcement.title }}</h3>
             <p>{{ announcement.content|linebreaks }}</p>
             <div class="announcement-meta">
-                <small>By {{ announcement.created_by.username }} on {{ announcement.created_at|date:"F d, Y g:i A" }}</small>
+                <small>By {% if announcement.created_by %}{{ announcement.created_by.username }}{% else %}Unknown{% endif %} on {{ announcement.created_at|date:"F d, Y g:i A" }}</small>
             </div>
         </div>
         {% endfor %}
