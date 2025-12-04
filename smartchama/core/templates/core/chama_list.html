@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% block title %}My Chamas - Smart Chama{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2>My Chamas</h2>
+        <a href="{% url 'chama_create' %}" class="btn btn-primary">Create New Chama</a>
+    </div>
+    
+    {% if user_chamas %}
+    <div class="chama-list">
+        {% for chama in user_chamas %}
+        <div class="chama-card">
+            <h3><a href="{% url 'chama_detail' chama.id %}">{{ chama.name }}</a></h3>
+            <p>{{ chama.description|truncatewords:20 }}</p>
+            <div class="chama-meta">
+                <span>Members: {{ chama.get_member_count }}</span>
+                <span>Contributions: KSh {{ chama.get_total_contributions|floatformat:2 }}</span>
+                <span>Frequency: {{ chama.contribution_frequency }}</span>
+            </div>
+            <div class="chama-actions">
+                <a href="{% url 'chama_detail' chama.id %}" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-state">You haven't joined any Chamas yet.</p>
+    {% endif %}
+    
+    {% if available_chamas %}
+    <div class="page-header">
+        <h2>Available Chamas</h2>
+    </div>
+    <div class="chama-list">
+        {% for chama in available_chamas %}
+        <div class="chama-card">
+            <h3>{{ chama.name }}</h3>
+            <p>{{ chama.description|truncatewords:20 }}</p>
+            <div class="chama-meta">
+                <span>Members: {{ chama.get_member_count }}</span>
+                <span>Contribution: KSh {{ chama.contribution_amount|floatformat:2 }} {{ chama.contribution_frequency }}</span>
+            </div>
+            <div class="chama-actions">
+                <a href="{% url 'chama_join' chama.id %}" class="btn btn-sm btn-primary">Join Chama</a>
+                <a href="{% url 'chama_detail' chama.id %}" class="btn btn-sm btn-secondary">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

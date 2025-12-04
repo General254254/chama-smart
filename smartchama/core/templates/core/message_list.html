@@ -1,0 +1,85 @@
+{% extends 'core/base.html' %}
+{% block title %}Messages - Smart Chama{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2>Messages</h2>
+        <a href="{% url 'message_send' %}" class="btn btn-primary">Send Message</a>
+    </div>
+    
+    {% if unread_count > 0 %}
+    <div class="alert alert-info">
+        You have {{ unread_count }} unread message{{ unread_count|pluralize }}.
+    </div>
+    {% endif %}
+    
+    <div class="message-tabs">
+        <button class="tab-button active" onclick="showTab('received')">Received ({{ received_messages.count }})</button>
+        <button class="tab-button" onclick="showTab('sent')">Sent ({{ sent_messages.count }})</button>
+    </div>
+    
+    <div id="received-tab" class="tab-content active">
+        <h3>Received Messages</h3>
+        {% if received_messages %}
+        <div class="message-list">
+            {% for message in received_messages %}
+            <div class="message-item {% if not message.is_read %}unread{% endif %}">
+                <h4><a href="{% url 'message_detail' message.id %}">{{ message.subject }}</a></h4>
+                <p>{{ message.content|truncatewords:20 }}</p>
+                <div class="message-meta">
+                    <small>From: {{ message.sender.username }}</small>
+                    {% if message.chama %}
+                    <small>Chama: {{ message.chama.name }}</small>
+                    {% endif %}
+                    <small>{{ message.created_at|date:"F d, Y g:i A" }}</small>
+                    {% if not message.is_read %}<span class="badge">New</span>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">No received messages.</p>
+        {% endif %}
+    </div>
+    
+    <div id="sent-tab" class="tab-content">
+        <h3>Sent Messages</h3>
+        {% if sent_messages %}
+        <div class="message-list">
+            {% for message in sent_messages %}
+            <div class="message-item">
+                <h4><a href="{% url 'message_detail' message.id %}">{{ message.subject }}</a></h4>
+                <p>{{ message.content|truncatewords:20 }}</p>
+                <div class="message-meta">
+                    <small>To: {{ message.recipient.username }}</small>
+                    {% if message.chama %}
+                    <small>Chama: {{ message.chama.name }}</small>
+                    {% endif %}
+                    <small>{{ message.created_at|date:"F d, Y g:i A" }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">No sent messages.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function showTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    document.getElementById(tabName + '-tab').classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+{% endblock %}
+

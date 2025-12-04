@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% block title %}Contributions - {{ chama.name }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2>Contributions - {{ chama.name }}</h2>
+        <a href="{% url 'contribution_add' chama.id %}" class="btn btn-primary">Add Contribution</a>
+    </div>
+    
+    <div class="summary-card">
+        <h3>Total Contributions: KSh {{ total|floatformat:2 }}</h3>
+    </div>
+    
+    {% if contributions %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Member</th>
+                <th>Amount</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contribution in contributions %}
+            <tr>
+                <td>{{ contribution.date }}</td>
+                <td>{{ contribution.membership.user.username }}</td>
+                <td>KSh {{ contribution.amount|floatformat:2 }}</td>
+                <td>{{ contribution.notes|truncatewords:10 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">No contributions recorded yet.</p>
+    {% endif %}
+    
+    <div class="form-actions">
+        <a href="{% url 'chama_detail' chama.id %}" class="btn btn-secondary">Back to Chama</a>
+    </div>
+</div>
+{% endblock %}
+

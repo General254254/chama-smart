@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% block title %}Announcements - {{ chama.name }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2>Announcements - {{ chama.name }}</h2>
+        {% if membership.can_edit_chama %}
+        <a href="{% url 'announcement_add' chama.id %}" class="btn btn-primary">Create Announcement</a>
+        {% endif %}
+    </div>
+    
+    {% if announcements %}
+    <div class="announcement-list">
+        {% for announcement in announcements %}
+        <div class="announcement-item {% if announcement.is_important %}important{% endif %}">
+            <h3>{{ announcement.title }}</h3>
+            <p>{{ announcement.content|linebreaks }}</p>
+            <div class="announcement-meta">
+                <small>By {{ announcement.created_by.username }} on {{ announcement.created_at|date:"F d, Y g:i A" }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-state">No announcements yet.</p>
+    {% endif %}
+    
+    <div class="form-actions">
+        <a href="{% url 'chama_detail' chama.id %}" class="btn btn-secondary">Back to Chama</a>
+    </div>
+</div>
+{% endblock %}
+

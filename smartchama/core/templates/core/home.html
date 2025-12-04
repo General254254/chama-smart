@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% block title %}Home - Smart Chama{% endblock %}
+{% block content %}
+<div class="container home-container">
+    <h1 class="welcome-message">Welcome to Smart Chama App</h1>
+    {% if user.is_authenticated %}
+        <p class="user-info">Hello, <strong>{{ user.username }}</strong>!</p>
+        <div class="action-buttons">
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+            <a href="{% url 'user_logout' %}" class="btn btn-secondary">Logout</a>
+        </div>
+    {% else %}
+        <p class="user-info">Please login or register to continue</p>
+        <div class="action-buttons">
+            <a href="{% url 'user_login' %}" class="btn btn-primary">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% block title %}Profile - Smart Chama{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>My Profile</h2>
+    <form method="post" enctype="multipart/form-data" class="profile-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Username:</label>
+            <input type="text" value="{{ user.username }}" disabled class="form-control">
+            <small>Username cannot be changed</small>
+        </div>
+        <div class="form-group">
+            <label for="id_first_name">First Name:</label>
+            {{ form.first_name }}
+        </div>
+        <div class="form-group">
+            <label for="id_last_name">Last Name:</label>
+            {{ form.last_name }}
+        </div>
+        <div class="form-group">
+            <label for="id_email">Email:</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_phone_number">Phone Number:</label>
+            {{ form.phone_number }}
+            {{ form.phone_number.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_address">Address:</label>
+            {{ form.address }}
+            {{ form.address.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_date_of_birth">Date of Birth:</label>
+            {{ form.date_of_birth }}
+            {{ form.date_of_birth.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_role">Role:</label>
+            {{ form.role }}
+            {{ form.role.errors }}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+{% endblock %}
+

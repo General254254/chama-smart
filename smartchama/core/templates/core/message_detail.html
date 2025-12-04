@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ message.subject }} - Smart Chama{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="message-detail">
+        <div class="message-header">
+            <h2>{{ message.subject }}</h2>
+            <div class="message-info">
+                <p><strong>From:</strong> {{ message.sender.username }}</p>
+                <p><strong>To:</strong> {{ message.recipient.username }}</p>
+                {% if message.chama %}
+                <p><strong>Chama:</strong> <a href="{% url 'chama_detail' message.chama.id %}">{{ message.chama.name }}</a></p>
+                {% endif %}
+                <p><strong>Date:</strong> {{ message.created_at|date:"F d, Y g:i A" }}</p>
+            </div>
+        </div>
+        <div class="message-content">
+            {{ message.content|linebreaks }}
+        </div>
+        <div class="form-actions">
+            {% if message.recipient == user %}
+            <a href="{% url 'message_send' %}?reply_to={{ message.sender.id }}" class="btn btn-primary">Reply</a>
+            {% endif %}
+            <a href="{% url 'message_list' %}" class="btn btn-secondary">Back to Messages</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

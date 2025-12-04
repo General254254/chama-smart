@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% block title %}Send Message - Smart Chama{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Send Message</h2>
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_recipient">Recipient:</label>
+            {{ form.recipient }}
+            {{ form.recipient.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_chama">Chama (optional):</label>
+            {{ form.chama }}
+            {{ form.chama.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_subject">Subject:</label>
+            {{ form.subject }}
+            {{ form.subject.errors }}
+        </div>
+        <div class="form-group">
+            <label for="id_content">Message:</label>
+            {{ form.content }}
+            {{ form.content.errors }}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Send Message</button>
+            <a href="{% url 'message_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
